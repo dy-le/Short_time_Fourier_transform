@@ -56,8 +56,7 @@ The continuous Fourier Transform is
 
 Substituting x(t) from above:
 
-<img src="https://render.githubusercontent.com/render/math?math={\displaystyle X(\omega )=\int _{-\infty }^{\infty }\left[\int _{-\infty }^{\infty }x(t)w(t-\tau )\,d\tau \right]\,e^{-j\omega t}\,dt
-}">
+<img src="https://render.githubusercontent.com/render/math?math={\displaystyle X(\omega )=\int _{-\infty }^{\infty }\left[\int _{-\infty }^{\infty }x(t)w(t-\tau )\,d\tau \right]\,e^{-j\omega t}\,dt}">
 
 <img src="https://render.githubusercontent.com/render/math?math={\displaystyle \qquad=\int _{-\infty }^{\infty }\int _{-\infty }^{\infty }x(t)w(t-\tau )\,e^{-j\omega t}\,d\tau \,dt.}">
 
@@ -65,8 +64,7 @@ Swapping order of integration:
 
 <img src="https://render.githubusercontent.com/render/math?math={\displaystyle X(\omega )=\int _{-\infty }^{\infty }\int _{-\infty }^{\infty }x(t)w(t-\tau )\,e^{-j\omega t}\,dt\,d\tau}">
 
-<img src="https://render.githubusercontent.com/render/math?math={\displaystyle \qquad=\int _{-\infty }^{\infty }\left[\int _{-\infty }^{\infty }x(t)w(t-\tau )\,e^{-j\omega t}\,dt\right]\,d\tau }
-">
+<img src="https://render.githubusercontent.com/render/math?math={\displaystyle \qquad=\int _{-\infty }^{\infty }\left[\int _{-\infty }^{\infty }x(t)w(t-\tau )\,e^{-j\omega t}\,dt\right]\,d\tau }">
 
 <img src="https://render.githubusercontent.com/render/math?math={\displaystyle \qquad=\int _{-\infty }^{\infty }X(\tau ,\omega )\,d\tau .}">
 
