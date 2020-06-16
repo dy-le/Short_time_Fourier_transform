@@ -104,11 +104,7 @@ function load_file_Callback(hObject, eventdata, handles)
     clc;
     [FileName,PathName] = uigetfile({'*.*'},'Load Wav File');
     [x,fs] = audioread([PathName '/' FileName]);
-    %[x1,fs1] = wavread([PathName '/' FileName]);
-    disp(class(x));
-    %disp(class(x1))
-    %setappdata(test,'test_x',x)
-    %setappdata(test,'test_fs',fs)
+    disp(length(x))
     handles.x = x;
     handles.fs = fs;
     axes(handles.axes1);
@@ -119,15 +115,6 @@ function load_file_Callback(hObject, eventdata, handles)
     title('Spectrogram of Original Signal');
     [S F T P] = spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
     spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
-    %plot([0:0.1:513],abs(F));
-    %surf(T,S,F,'edgecolor','none');
-    %rotated3d on
-    %axis tight;
-    %view(0,90);
-    %colormap(hot);
-    %get(gca,'clim',[-80 -30]);
-    %axes.xlabel('Time(Seconds)');
-    %axes.ylabel('Frequences(Hz)')
     
 guidata(hObject,handles);
 
@@ -138,20 +125,24 @@ function load_random_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 clc;
-    fs = 8200;
-    x = randn(5*fs,1);
-	handles.x = x;
+    tmp = randi(100,9,1);
+    t = [0:0.1:1000];
+    disp(t)
+    x1 = tmp(1)*sin(2*pi*tmp(2).*t+tmp(3)*pi/3);
+    x2 = tmp(4)*sin(2*pi*tmp(5).*t+tmp(6)*pi/5);
+    x3 = tmp(7)*sin(2*pi*tmp(8).*t+tmp(9)*pi/7);
+    x = x1 + x2 + x3;
+    fs = 1000;
+    handles.x = x;
     handles.fs = fs;
     axes(handles.axes1);
     time = 0:1/fs:(length(handles.x)-1)/fs;
-    plot(time,handles.x);
+    plot(abs(handles.x),t);
     title('Original Signal');
     axes(handles.axes2);
-    %s = spectrogram(handles.x,128,120,128,fs);
-    %plot(time,s)
-    specgram(handles.x, 1024, handles.fs);
     title('Spectrogram of Original Signal');
-    
+    [S F T P] = spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
+    spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');    
     
 guidata(hObject, handles);
 
