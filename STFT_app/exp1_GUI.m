@@ -22,7 +22,7 @@ function varargout = exp1_GUI(varargin)
 
 % Edit the above text to modify the response to help exp1_GUI
 
-% Last Modified by GUIDE v2.5 14-Jun-2020 09:17:37
+% Last Modified by GUIDE v2.5 16-Jun-2020 16:18:22
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -145,6 +145,3 @@ clc;
     spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');    
     
 guidata(hObject, handles);
-
-
-
