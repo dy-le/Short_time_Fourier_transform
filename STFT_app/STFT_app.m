@@ -1,35 +1,35 @@
-function varargout = exp1_GUI(varargin)
-% exp1_GUI M-file for exp1_GUI.fig
-%      exp1_GUI, by itself, creates a new exp1_GUI or raises the existing
+function varargout = STFT_app(varargin)
+% STFT_APP MATLAB code for STFT_app.fig
+%      STFT_APP, by itself, creates a new STFT_APP or raises the existing
 %      singleton*.
 %
-%      H = exp1_GUI returns the handle to a new exp1_GUI or the handle to
+%      H = STFT_APP returns the handle to a new STFT_APP or the handle to
 %      the existing singleton*.
 %
-%      exp1_GUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in exp1_GUI.M with the given input arguments.
+%      STFT_APP('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in STFT_APP.M with the given input arguments.
 %
-%      exp1_GUI('Property','Value',...) creates a new exp1_GUI or raises the
+%      STFT_APP('Property','Value',...) creates a new STFT_APP or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before exp1_GUI_OpeningFcn gets called.  An
+%      applied to the GUI before STFT_app_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to exp1_GUI_OpeningFcn via varargin.
+%      stop.  All inputs are passed to STFT_app_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help exp1_GUI
+% Edit the above text to modify the response to help STFT_app
 
-% Last Modified by GUIDE v2.5 16-Jun-2020 16:18:22
+% Last Modified by GUIDE v2.5 16-Jun-2020 23:19:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @exp1_GUI_OpeningFcn, ...
-                   'gui_OutputFcn',  @exp1_GUI_OutputFcn, ...
+                   'gui_OpeningFcn', @STFT_app_OpeningFcn, ...
+                   'gui_OutputFcn',  @STFT_app_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,29 +44,26 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before exp1_GUI is made visible.
-function exp1_GUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before STFT_app is made visible.
+function STFT_app_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to exp1_GUI (see VARARGIN)
+% varargin   command line arguments to STFT_app (see VARARGIN)
 
-% Choose default command line output for exp1_GUI
+% Choose default command line output for STFT_app
 handles.output = hObject;
-
-%handles.FSQ = (get(handles.slider2,'Value'));
-%set(handles.edit1, 'String', [num2str(handles.FSQ) ''] );
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes exp1_GUI wait for user response (see UIRESUME)
+% UIWAIT makes STFT_app wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = exp1_GUI_OutputFcn(hObject, eventdata, handles) 
+function varargout = STFT_app_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -74,26 +71,6 @@ function varargout = exp1_GUI_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
-
-
-
-% --- Executes on button press in exit.
-function exit_Callback(hObject, eventdata, handles)
-% hObject    handle to exit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-disp(getappdata(test,'test_x'))
-cl = questdlg('Do you want to EXIT?','EXIT',...
-            'Yes','No','No');
-switch cl
-    case 'Yes'
-        close();
-        clear all;
-        return;
-    case 'No'
-        quit cancel;
-end 
 
 
 % --- Executes on button press in load_file.
@@ -125,23 +102,47 @@ function load_random_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 clc;
+    Fs = 1000;            % Sampling frequency                    
+    T = 1/Fs;             % Sampling period       
+    L = 1500;             % Length of signal
+    t = (0:L-1)*T;        % Time vector
     tmp = randi(100,9,1);
-    t = [0:0.1:1000];
-    disp(t)
-    x1 = tmp(1)*sin(2*pi*tmp(2).*t+tmp(3)*pi/3);
-    x2 = tmp(4)*sin(2*pi*tmp(5).*t+tmp(6)*pi/5);
-    x3 = tmp(7)*sin(2*pi*tmp(8).*t+tmp(9)*pi/7);
+    t1 = t;
+    t1()
+    x1 = tmp(1)*sin(2*pi*tmp(2).*t+tmp(3));
+    x2 = tmp(4)*sin(2*pi*tmp(5)*5.*t+tmp(6)*pi/5);
+    x3 = tmp(7)*sin(2*pi*tmp(8)*10.*t+tmp(9)*pi/7);
     x = x1 + x2 + x3;
-    fs = 1000;
+    
+%     x1 = rand() * sin(2*pi*(randi(100)+30)*t);
+%     temp = zeros(1, L);
+%     t1 = randi(1200);
+%     t2 = randi(1500 - t1) + t1;
+%     temp(t1:t2) = 1;
+%     x1 = temp.*x1;
+%     x2 = rand() * sin(2*pi*(randi(100)+30)*t);
+%     temp = zeros(1, L);
+%     t1 = randi(1200);
+%     t2 = randi(1500 - t1) + t1;
+%     temp(t1:t2) = 1;
+%     x2 = temp.*x2;
+%     x3 = rand() * sin(2*pi*(randi(100)+30)*t);
+%     temp = zeros(1, L);
+%     t1 = randi(1200);
+%     t2 = randi(1500 - t1) + t1;
+%     temp(t1:t2) = 1;
+%     x3 = temp.*x3;
+%     x = x1 + x2 + x3;
+    
+    fs = 1500;
     handles.x = x;
     handles.fs = fs;
     axes(handles.axes1);
     time = 0:1/fs:(length(handles.x)-1)/fs;
-    plot(abs(handles.x),t);
+    plot(t,handles.x);
     title('Original Signal');
     axes(handles.axes2);
     title('Spectrogram of Original Signal');
-    [S F T P] = spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
-    spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');    
-    
+    %[S F T P] = spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
+    spectrogram(handles.x, hamming(512),128,1024, handles.fs,'yaxis');    
 guidata(hObject, handles);
