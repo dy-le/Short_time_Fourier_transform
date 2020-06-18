@@ -102,47 +102,80 @@ function load_random_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 clc;
+
+    
     Fs = 1000;            % Sampling frequency                    
     T = 1/Fs;             % Sampling period       
     L = 1500;             % Length of signal
     t = (0:L-1)*T;        % Time vector
-    tmp = randi(100,9,1);
-    t1 = t;
-    t1()
-    x1 = tmp(1)*sin(2*pi*tmp(2).*t+tmp(3));
-    x2 = tmp(4)*sin(2*pi*tmp(5)*5.*t+tmp(6)*pi/5);
-    x3 = tmp(7)*sin(2*pi*tmp(8)*10.*t+tmp(9)*pi/7);
-    x = x1 + x2 + x3;
-    
-%     x1 = rand() * sin(2*pi*(randi(100)+30)*t);
-%     temp = zeros(1, L);
-%     t1 = randi(1200);
-%     t2 = randi(1500 - t1) + t1;
-%     temp(t1:t2) = 1;
-%     x1 = temp.*x1;
-%     x2 = rand() * sin(2*pi*(randi(100)+30)*t);
-%     temp = zeros(1, L);
-%     t1 = randi(1200);
-%     t2 = randi(1500 - t1) + t1;
-%     temp(t1:t2) = 1;
-%     x2 = temp.*x2;
-%     x3 = rand() * sin(2*pi*(randi(100)+30)*t);
-%     temp = zeros(1, L);
-%     t1 = randi(1200);
-%     t2 = randi(1500 - t1) + t1;
-%     temp(t1:t2) = 1;
-%     x3 = temp.*x3;
-%     x = x1 + x2 + x3;
-    
-    fs = 1500;
-    handles.x = x;
-    handles.fs = fs;
+
+
+    [x1, f1, t1] = random_signal(Fs, L)
+    [x2, f2, t2] = random_signal(Fs, L)
+    [x3, f3, t3] = random_signal(Fs, L)
+
+    x = x1 + x2 + x3
     axes(handles.axes1);
-    time = 0:1/fs:(length(handles.x)-1)/fs;
-    plot(t,handles.x);
-    title('Original Signal');
+    %handles.x = x;
+    plot(t, x);
+    ylim([-3 3])
+    str = {sprintf('f1 = %d; t1 = [%f, %f]', f1, t1(1), t1(2)), sprintf('f2 = %d; t2 = [%f, %f]', f2, t2(1), t2(2)), sprintf('f3 = %d; t3 = [%f, %f]', f3, t3(1), t3(2))};
+    text(0.1, 2.4, str)
+    % define analysis parameters
+    wlen = 128;                        % window length (recomended to be power of 2)
+    hop = wlen/4;                      % hop size (recomended to be power of 2)
+    nfft = 2048;                       % number of fft points (recomended to be power of 2)
+
+    % perform STFT
+    win = blackman(wlen, 'periodic');
+    [S, f, t] = STFT(x, wlen, hop, nfft, Fs);
+
+    % calculate the coherent amplification of the window
+    C = sum(win)/wlen;
+    % take the amplitude of fft(x) and scale it, so not to be a
+    % function of the length of the window and its coherent amplification
+    S = abs(S)/wlen/C;
+    % correction of the DC & Nyquist component
+    if rem(nfft, 2)                     % odd nfft excludes Nyquist point
+        S(2:end, :) = S(2:end, :).*2;
+    else                                % even nfft includes Nyquist point
+        S(2:end-1, :) = S(2:end-1, :).*2;
+    end
+    % convert amplitude spectrum to dB (min = -120 dB)
+    S = 20*log10(S + 1e-6);
     axes(handles.axes2);
-    title('Spectrogram of Original Signal');
-    %[S F T P] = spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
-    spectrogram(handles.x, hamming(512),128,1024, handles.fs,'yaxis');    
+    surf(t, f, S)
+    shading interp
+    axis tight
+    view(0, 90)
+    set(gca, 'FontName', 'Times New Roman', 'FontSize', 14)
+    xlabel('Time, s')
+    ylabel('Frequency, Hz')
+    title('Amplitude spectrogram of the signal')
+    hcol = colorbar;
+    set(hcol, 'FontName', 'Times New Roman', 'FontSize', 14)
+    ylabel(hcol, 'Magnitude, dB')
+    
+%     Fs = 1000;            % Sampling frequency                    
+%     T = 1/Fs;             % Sampling period       
+%     L = 1500;             % Length of signal
+%     t = (0:L-1)*T;        % Time vector
+%     tmp = randi(100,9,1);
+%     t1 = t;
+%     t1()
+%     x1 = tmp(1)*sin(2*pi*tmp(2).*t+tmp(3));
+%     x2 = tmp(4)*sin(2*pi*tmp(5)*5.*t+tmp(6)*pi/5);
+%     x3 = tmp(7)*sin(2*pi*tmp(8)*10.*t+tmp(9)*pi/7);
+%     x = x1 + x2 + x3;    
+%     fs = 1500;
+%     handles.x = x;
+%     handles.fs = fs;
+%     axes(handles.axes1);
+%     time = 0:1/fs:(length(handles.x)-1)/fs;
+%     plot(t,handles.x);
+%     title('Original Signal');
+%     axes(handles.axes2);
+%     title('Spectrogram of Original Signal');
+%     %[S F T P] = spectrogram(handles.x, hamming(512),256,1024, handles.fs,'yaxis');
+%     spectrogram(handles.x, hamming(512),128,1024, handles.fs,'yaxis');    
 guidata(hObject, handles);
